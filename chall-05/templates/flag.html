@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Portal do Usuário - Admin</title>
+  <style>
+    body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
+    .box { max-width: 600px; width: 100%; }
+    h1 { color: #00ff88; }
+    .flag { background: #0d2b0d; border: 1px solid #00ff88; padding: 15px; margin-top: 20px; font-size: 1.1em; }
+    .info { color: #888; font-size: 0.85em; margin-top: 10px; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>Bem-vindo, Admin!</h1>
+  <p>Cookie <code>role=user</code> alterado para <code>role=admin</code>. O servidor aceitou sem validação.</p>
+  <div class="flag">{{ flag }}</div>
+  <div class="info">Ferramentas: DevTools (Application → Cookies), Burp Suite, curl --cookie</div>
+</div>
+</body>
+</html>

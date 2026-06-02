@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Portal Legal</title>
+  <style>
+    body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
+    .box { max-width: 650px; width: 100%; }
+    h1 { color: #00ff88; }
+    a { color: #00ff88; }
+    pre { background: #0d0d1a; padding: 15px; white-space: pre-wrap; border: 1px solid #333; }
+    .error { color: #ff4444; background: #1a0000; padding: 10px; margin-top: 10px; }
+    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>Portal Legal</h1>
+  <p>Documentos disponíveis:</p>
+  <ul>
+    <li><a href="terms?doc=terms">Termos de Uso</a></li>
+    <li><a href="terms?doc=privacy">Política de Privacidade</a></li>
+  </ul>
+
+  {% if content %}
+  <h2>{{ doc }}</h2>
+  <pre>{{ content }}</pre>
+  {% elif error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+
+  <div class="hint">O parâmetro <code>doc</code> é usado para carregar arquivos do servidor. O caminho não é validado.</div>
+</div>
+</body>
+</html>

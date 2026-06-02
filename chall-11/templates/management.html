@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CorpNet - Gerenciamento</title>
+  <style>
+    body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
+    .box { max-width: 700px; width: 100%; }
+    h1 { color: #00ff88; }
+    h2 { color: #aaffaa; font-size: 1em; }
+    input { background: #0d0d1a; border: 1px solid #444; color: #e0e0e0; padding: 8px 12px; width: 60%; box-sizing: border-box; font-family: monospace; }
+    button { background: #00ff88; color: #000; border: none; padding: 9px 14px; cursor: pointer; font-family: monospace; font-weight: bold; }
+    .output { background: #000; border: 1px solid #333; padding: 15px; margin-top: 15px; white-space: pre-wrap; min-height: 60px; color: #00ff88; font-size: 0.9em; }
+    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>Painel de Gerenciamento</h1>
+  <p>Bem-vindo, <strong>{{ user }}</strong> (admin).</p>
+
+  <h2>Diagnóstico de Rede</h2>
+  <form method="GET" action="network">
+    <input type="hidden" name="token" value="{{ request.args.get('token', '') }}">
+    <input type="text" name="host" value="{{ host or '' }}" placeholder="IP ou hostname">
+    <button type="submit">Ping</button>
+  </form>
+
+  {% if output %}
+  <div class="output">{{ output }}</div>
+  {% endif %}
+
+  <div class="hint">O parâmetro <code>host</code> é passado diretamente para o comando ping sem sanitização.</div>
+</div>
+</body>
+</html>

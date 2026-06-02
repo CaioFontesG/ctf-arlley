@@ -1,0 +1,160 @@
+version: '3.8'
+
+networks:
+  ctf_net:      # desafios 01-10 + CTFd + nginx
+  rce_net:      # chall-11 + nginx (isolado dos demais desafios)
+
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - ctf_net
+      - rce_net
+    depends_on:
+      - ctfd
+      - chall-02
+      - chall-03
+      - chall-04
+      - chall-05
+      - chall-06
+      - chall-07
+      - chall-08
+      - chall-09
+      - chall-10
+      - chall-11
+
+  ctfd:
+    image: ctfd/ctfd
+    expose:
+      - "8000"
+    env_file: .env
+    environment:
+      - REVERSE_PROXY=true
+    volumes:
+      - ctfd_data:/var/log/CTFd
+      - ctfd_uploads:/var/uploads
+    networks:
+      - ctf_net
+    restart: unless-stopped
+
+  ctfd-init:
+    image: python:3.11-slim
+    command: >
+      bash -c "pip install requests -q && python3 /scripts/ctfd_init.py"
+    volumes:
+      - ./ctfd_init.py:/scripts/ctfd_init.py:ro
+    env_file: .env
+    environment:
+      - CTFD_URL=http://ctfd:8000
+    networks:
+      - ctf_net
+    depends_on:
+      - ctfd
+    restart: "no"
+
+  chall-01:
+    build: ./chall-01
+    ports:
+      - "9099:9099"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_RECONHECIMENTO}
+
+  chall-02:
+    build: ./chall-02
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_ENUMERACAO}
+
+  chall-03:
+    build: ./chall-03
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_CREDENCIAIS}
+
+  chall-04:
+    build: ./chall-04
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_VALIDACAO_FRONT}
+
+  chall-05:
+    build: ./chall-05
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_DEVTOOLS}
+
+  chall-06:
+    build: ./chall-06
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_HEADER}
+
+  chall-07:
+    build: ./chall-07
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_FUZZING}
+
+  chall-08:
+    build: ./chall-08
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_LFI}
+
+  chall-09:
+    build: ./chall-09
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_SQL_INJECTION}
+
+  chall-10:
+    build: ./chall-10
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_UPLOAD}
+
+  chall-11:
+    build: ./chall-11
+    expose:
+      - "5000"
+    networks:
+      - rce_net
+    environment:
+      - FLAG=${FLAG_CADEIA}
+
+volumes:
+  ctfd_data:
+  ctfd_uploads:

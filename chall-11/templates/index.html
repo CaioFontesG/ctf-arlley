@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CorpNet - Início</title>
+  <style>
+    body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
+    .box { max-width: 600px; width: 100%; }
+    h1 { color: #00ff88; }
+    a { color: #00ff88; }
+    .error { color: #ff4444; background: #1a0000; padding: 10px; margin-top: 15px; }
+    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>CorpNet v3.1</h1>
+  <p>Sistema de gerenciamento corporativo.</p>
+  <p>Acesse o <a href="management">painel de gerenciamento</a> com suas credenciais de administrador.</p>
+  {% if error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+  <div class="hint">Este sistema tem uma interface de autenticação legada ainda em uso. Explore todas as rotas disponíveis.</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Variáveis de ambiente — nunca commitar
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Bancos de dados gerados em runtime
+*.db
+*.sqlite3
+
+# Uploads de jogadores
+chall-10/uploads/
+
+# macOS / editores
+.DS_Store
+*.swp
+.idea/
+.vscode/

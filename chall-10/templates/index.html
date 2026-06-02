@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Perfil - Upload de Foto</title>
+  <style>
+    body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
+    .box { max-width: 600px; width: 100%; }
+    h1 { color: #00ff88; }
+    input[type=file] { background: #0d0d1a; border: 1px solid #444; color: #e0e0e0; padding: 8px; width: 100%; box-sizing: border-box; }
+    button { background: #00ff88; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-family: monospace; font-weight: bold; margin-top: 10px; }
+    .message { margin-top: 15px; padding: 10px; border: 1px solid #444; }
+    .file-link { margin-top: 10px; }
+    .file-link a { color: #00ff88; }
+    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>Foto de Perfil</h1>
+  <p>Envie sua foto de perfil. Apenas arquivos <strong>.jpg</strong> são aceitos.</p>
+  <form method="POST" action="upload" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    <br>
+    <button type="submit">Enviar</button>
+  </form>
+  {% if message %}
+  <div class="message">{{ message }}</div>
+  {% endif %}
+  {% if file_url %}
+  <div class="file-link">Arquivo salvo em: <a href="{{ file_url }}">{{ file_url }}</a></div>
+  {% endif %}
+  <div class="hint">A validação verifica apenas a última extensão. Arquivos são salvos e acessíveis em <code>uploads/</code>.</div>
+</div>
+</body>
+</html>

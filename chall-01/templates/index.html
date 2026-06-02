@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Internal Monitor</title>
+  <style>
+    body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
+    .box { max-width: 600px; width: 100%; }
+    h1 { color: #00ff88; }
+    .flag { background: #0d2b0d; border: 1px solid #00ff88; padding: 15px; margin-top: 20px; font-size: 1.1em; }
+    .badge { display: inline-block; background: #003300; color: #00ff88; padding: 2px 8px; font-size: 0.8em; margin-left: 8px; border: 1px solid #00ff88; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>Internal Monitor <span class="badge">PORT 9099</span></h1>
+  <p>Serviço de monitoramento interno. Acesso restrito.</p>
+  <p>Se você chegou aqui, seu scanner funcionou.</p>
+  <div class="flag">{{ flag }}</div>
+</div>
+</body>
+</html>
