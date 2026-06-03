@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Perfil - Execução Detectada</title>
+  <style>
+    body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
+    .box { max-width: 600px; width: 100%; }
+    h1 { color: #00ff88; }
+    .flag { background: #0d2b0d; border: 1px solid #00ff88; padding: 15px; margin-top: 20px; font-size: 1.1em; }
+    .output { background: #0d0d1a; padding: 12px; margin-top: 10px; font-size: 0.9em; }
+    .info { color: #888; font-size: 0.85em; margin-top: 10px; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>Código executado no servidor!</h1>
+  <p>Arquivo <code>{{ filename }}</code> contém código executável e foi processado pelo servidor.</p>
+  <div class="output">
+    [server] Detectado: código no arquivo enviado<br>
+    [server] Executando {{ filename }}...<br>
+    [server] Output capturado com sucesso
+  </div>
+  <div class="flag">{{ flag }}</div>
+  <div class="info">Ferramentas: Burp Suite para interceptar o upload, curl -F ou script Python com requests</div>
+</div>
+</body>
+</html>

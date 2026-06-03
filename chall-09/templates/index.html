@@ -1,56 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Loja - Catálogo</title>
+  <title>Dashboard Interno</title>
   <style>
     body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
-    .box { max-width: 700px; width: 100%; }
+    .box { max-width: 600px; width: 100%; }
     h1 { color: #00ff88; }
-    input { background: #0d0d1a; border: 1px solid #444; color: #e0e0e0; padding: 8px 12px; width: 70%; box-sizing: border-box; font-family: monospace; }
-    button { background: #00ff88; color: #000; border: none; padding: 9px 16px; cursor: pointer; font-family: monospace; font-weight: bold; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-    th { text-align: left; border-bottom: 1px solid #00ff88; padding: 6px; color: #00ff88; }
-    td { padding: 6px; border-bottom: 1px solid #222; }
-    .query-box { background: #0d0d1a; padding: 8px; margin-top: 10px; font-size: 0.85em; color: #888; }
-    .error { color: #ff4444; margin-top: 10px; background: #1a0000; padding: 10px; }
+    .card { border: 1px solid #333; padding: 15px; margin-top: 15px; }
+    .card h2 { color: #aaffaa; font-size: 0.95em; margin: 0 0 8px; }
+    .metric { font-size: 1.3em; color: #00ff88; }
     .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
   </style>
+  <script src="static/config.js"></script>
 </head>
 <body>
 <div class="box">
-  <h1>Catálogo de Produtos</h1>
-  <form method="GET" action="search">
-    <input type="text" name="q" value="{{ q or '' }}" placeholder="Buscar produto...">
-    <button type="submit">Buscar</button>
-  </form>
-
-  {% if query %}
-  <div class="query-box">Query: {{ query }}</div>
-  {% endif %}
-
-  {% if error %}
-  <div class="error">Erro SQL: {{ error }}</div>
-  {% endif %}
-
-  {% if results is defined %}
-    {% if results %}
-    <table>
-      <tr><th>ID</th><th>Nome</th><th>Descrição</th><th>Preço</th></tr>
-      {% for r in results %}
-      <tr>
-        <td>{{ r.id }}</td>
-        <td>{{ r.name }}</td>
-        <td>{{ r.description }}</td>
-        <td>{{ r.price }}</td>
-      </tr>
-      {% endfor %}
-    </table>
-    {% elif q %}
-    <p>Nenhum resultado para "{{ q }}".</p>
-    {% endif %}
-  {% endif %}
-
-  <div class="hint">O input vai direto para a query SQL. A flag está em outra tabela do banco.</div>
+  <h1>Dashboard Interno</h1>
+  <div class="card">
+    <h2>Status</h2>
+    <div class="metric">online</div>
+  </div>
+  <div class="card">
+    <h2>Ambiente</h2>
+    <div class="metric">production</div>
+  </div>
+  <div class="card">
+    <h2>API</h2>
+    <div class="metric">autenticada</div>
+  </div>
+  <div class="hint">Esta aplicação usa uma chave de API para acessar recursos internos. Inspecione os arquivos carregados pela página.</div>
 </div>
 </body>
 </html>

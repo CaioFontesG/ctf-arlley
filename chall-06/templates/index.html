@@ -1,27 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Panel - Acesso Negado</title>
+  <title>Internal Monitor</title>
   <style>
     body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
     .box { max-width: 600px; width: 100%; }
-    h1 { color: #ff4444; }
-    .error { background: #1a0000; border: 1px solid #ff4444; padding: 15px; margin-top: 20px; }
-    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
-    a { color: #00ff88; }
+    h1 { color: #00ff88; }
+    .flag { background: #0d2b0d; border: 1px solid #00ff88; padding: 15px; margin-top: 20px; font-size: 1.1em; }
+    .badge { display: inline-block; background: #003300; color: #00ff88; padding: 2px 8px; font-size: 0.8em; margin-left: 8px; border: 1px solid #00ff88; }
   </style>
 </head>
 <body>
 <div class="box">
-  {% if error %}
-  <h1>Acesso Negado</h1>
-  <div class="error">{{ error }}</div>
-  {% else %}
-  <h1 style="color:#00ff88">Painel Administrativo</h1>
-  <p>Área restrita à rede interna da empresa.</p>
-  {% endif %}
-  <p>Rota protegida: <a href="admin">/admin</a></p>
-  <div class="hint">O servidor verifica o cabeçalho HTTP que indica o IP de origem da requisição.</div>
+  <h1>Internal Monitor <span class="badge">PORT 9099</span></h1>
+  <p>Serviço de monitoramento interno. Acesso restrito.</p>
+  <p>Se você chegou aqui, seu scanner funcionou.</p>
+  <div class="flag">{{ flag }}</div>
 </div>
 </body>
 </html>

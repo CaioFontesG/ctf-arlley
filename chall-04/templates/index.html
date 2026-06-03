@@ -1,54 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Loja - Acesso Premium</title>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
   <style>
     body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
     .box { max-width: 600px; width: 100%; }
     h1 { color: #00ff88; }
-    .produto { border: 1px solid #333; padding: 20px; margin-top: 20px; }
-    .produto h2 { color: #aaffaa; margin: 0 0 8px; }
-    .preco { font-size: 1.8em; color: #00ff88; margin: 10px 0; }
-    .creditos { color: #888; font-size: 0.9em; margin-bottom: 15px; }
-    button { background: #00ff88; color: #000; border: none; padding: 10px 24px; cursor: pointer; font-family: monospace; font-weight: bold; font-size: 1em; }
-    button:disabled { background: #333; color: #666; cursor: not-allowed; }
-    .aviso { background: #1a1000; border: 1px solid #886600; padding: 12px; margin-top: 15px; }
-    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
+    p { color: #aaa; }
+    .hint { color: #555; margin-top: 40px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
   </style>
-  <script>
-    const CREDITOS = 5.00;
-    const PRECO    = 99.90;
-
-    window.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('saldo').textContent = 'R$ ' + CREDITOS.toFixed(2);
-
-      document.getElementById('btn-comprar').addEventListener('click', function () {
-        if (CREDITOS < PRECO) {
-          alert('Saldo insuficiente! Você tem R$ ' + CREDITOS.toFixed(2) + ' mas o item custa R$ ' + PRECO.toFixed(2));
-          return;
-        }
-        document.getElementById('form-compra').submit();
-      });
-    });
-  </script>
 </head>
 <body>
 <div class="box">
-  <h1>Loja Interna</h1>
-  <p class="creditos">Seu saldo: <span id="saldo">...</span></p>
-  <div class="produto">
-    <h2>Acesso Premium</h2>
-    <p>Desbloqueie recursos exclusivos e acesse o painel restrito.</p>
-    <div class="preco">R$ 99,90</div>
-    <form id="form-compra" method="POST" action="comprar">
-      <input type="hidden" name="preco" value="99.90">
-      <button type="button" id="btn-comprar">Comprar agora</button>
-    </form>
-  </div>
-  {% if aviso %}
-  <div class="aviso">{{ aviso }}</div>
-  {% endif %}
-  <div class="hint">O JavaScript valida o saldo antes de enviar o formulário. Mas quem valida o preço no servidor?</div>
+  <h1>Dashboard</h1>
+  <p>Carregando dados do sistema...</p>
+  <div class="hint">Dica: desenvolvedores deixam mensagens de debug em algum lugar do navegador.</div>
 </div>
+<script>
+  console.log("{{ flag }}");
+</script>
 </body>
 </html>
