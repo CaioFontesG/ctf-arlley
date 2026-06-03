@@ -45,7 +45,7 @@ CHALLENGES = [
         "category": "Web",
         "description": (
             f"Às vezes informações sensíveis ficam escondidas no código-fonte da página.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-02/]({BASE_URL}/chall-02/)\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-01/]({BASE_URL}/chall-01/)\n\n"
             f"Dica de ferramenta: Ctrl+U no navegador ou DevTools → Elements."
         ),
         "value": 50,
@@ -59,7 +59,7 @@ CHALLENGES = [
         "category": "Web",
         "description": (
             f"Esta aplicação armazena uma informação importante no navegador.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-03/]({BASE_URL}/chall-03/)\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-02/]({BASE_URL}/chall-02/)\n\n"
             f"Dica de ferramenta: DevTools → Application → Cookies."
         ),
         "value": 50,
@@ -73,7 +73,7 @@ CHALLENGES = [
         "category": "Web",
         "description": (
             f"Desenvolvedores às vezes deixam informações de debug visíveis no console JavaScript.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-04/]({BASE_URL}/chall-04/)\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-03/]({BASE_URL}/chall-03/)\n\n"
             f"Dica de ferramenta: DevTools → Console."
         ),
         "value": 50,
@@ -87,7 +87,7 @@ CHALLENGES = [
         "category": "Web",
         "description": (
             f"Uma resposta HTTP tem mais do que só o corpo da página — os headers também carregam informações.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-05/]({BASE_URL}/chall-05/)\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-04/]({BASE_URL}/chall-04/)\n\n"
             f"Dica de ferramenta: DevTools → Network → selecione a requisição → Response Headers."
         ),
         "value": 50,
@@ -101,7 +101,7 @@ CHALLENGES = [
         "category": "Web",
         "description": (
             f"Sistema implantado às pressas. O desenvolvedor pode não ter alterado as configurações padrão.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-01/]({BASE_URL}/chall-01/)"
+            f"Acesse o desafio: [{BASE_URL}/chall-05/]({BASE_URL}/chall-05/)"
         ),
         "value": 100,
         "flag": FLAGS[5],

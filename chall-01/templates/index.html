@@ -1,30 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sistema - Login</title>
+  <meta charset="UTF-8">
+  <title>Blog Pessoal</title>
   <style>
     body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
-    .box { max-width: 420px; width: 100%; }
+    .box { max-width: 600px; width: 100%; }
     h1 { color: #00ff88; }
-    input { background: #0d0d1a; border: 1px solid #444; color: #e0e0e0; padding: 8px 12px; width: 100%; box-sizing: border-box; margin-bottom: 10px; font-family: monospace; }
-    button { background: #00ff88; color: #000; border: none; padding: 10px 20px; cursor: pointer; font-family: monospace; font-weight: bold; }
-    .error { color: #ff4444; margin-top: 10px; }
-    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
+    p { color: #aaa; }
+    .hint { color: #555; margin-top: 40px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
   </style>
 </head>
 <body>
+<!-- {{ flag }} -->
 <div class="box">
-  <h1>Painel Administrativo</h1>
-  <p>Acesso restrito. Faça login para continuar.</p>
-  <form method="POST" action="login">
-    <input type="text" name="username" placeholder="Usuário" required>
-    <input type="password" name="password" placeholder="Senha" required>
-    <button type="submit">Entrar</button>
-  </form>
-  {% if error %}
-  <div class="error">{{ error }}</div>
-  {% endif %}
-  <div class="hint">Este sistema foi implantado rapidamente. As configurações padrão podem não ter sido alteradas.</div>
+  <h1>Blog Pessoal</h1>
+  <p>Em construção. Volte em breve!</p>
+  <div class="hint">Dica: tente inspecionar o que está ao redor desta página.</div>
 </div>
 </body>
 </html>

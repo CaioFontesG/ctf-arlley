@@ -2,21 +2,23 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Área Restrita</title>
+  <title>Dashboard</title>
   <style>
     body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
     .box { max-width: 600px; width: 100%; }
-    h1 { color: #ff4444; }
+    h1 { color: #00ff88; }
     p { color: #aaa; }
     .hint { color: #555; margin-top: 40px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
   </style>
 </head>
 <body>
 <div class="box">
-  <h1>Acesso Negado</h1>
-  <p>Você não tem permissão para acessar este recurso.</p>
-  <p>Mas talvez o navegador guarde algo interessante...</p>
-  <div class="hint">Dica: o navegador armazena dados localmente para cada site.</div>
+  <h1>Dashboard</h1>
+  <p>Carregando dados do sistema...</p>
+  <div class="hint">Dica: desenvolvedores deixam mensagens de debug em algum lugar do navegador.</div>
 </div>
+<script>
+  console.log("{{ flag }}");
+</script>
 </body>
 </html>

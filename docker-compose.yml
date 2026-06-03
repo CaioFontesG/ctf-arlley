@@ -68,7 +68,7 @@ services:
     networks:
       - ctf_net
     environment:
-      - FLAG=${FLAG_HTML_COMMENT}
+      - FLAG=${FLAG_COOKIE}
 
   chall-03:
     build: ./chall-03
@@ -77,7 +77,7 @@ services:
     networks:
       - ctf_net
     environment:
-      - FLAG=${FLAG_COOKIE}
+      - FLAG=${FLAG_CONSOLE}
 
   chall-04:
     build: ./chall-04
@@ -86,7 +86,7 @@ services:
     networks:
       - ctf_net
     environment:
-      - FLAG=${FLAG_CONSOLE}
+      - FLAG=${FLAG_NETWORK}
 
   chall-05:
     build: ./chall-05
@@ -95,7 +95,7 @@ services:
     networks:
       - ctf_net
     environment:
-      - FLAG=${FLAG_NETWORK}
+      - FLAG=${FLAG_CREDENCIAIS}
 
   chall-01:
     build: ./chall-01
@@ -104,7 +104,7 @@ services:
     networks:
       - ctf_net
     environment:
-      - FLAG=${FLAG_CREDENCIAIS}
+      - FLAG=${FLAG_HTML_COMMENT}
 
   chall-06:
     build: ./chall-06
