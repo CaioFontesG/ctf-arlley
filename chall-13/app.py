@@ -4,7 +4,8 @@ from flask import Flask, render_template, request, g
 
 app = Flask(__name__)
 FLAG    = os.environ.get('FLAG', 'FLAG_NOT_SET')
-DB_PATH = '/tmp/chall07.db'
+DB_PATH = '/tmp/chall13.db'
+_db_initialized = False
 
 def get_db():
     db = getattr(g, '_database', None)
@@ -14,29 +15,39 @@ def get_db():
     return db
 
 def init_db():
-    if not os.path.exists(DB_PATH):
-        conn = sqlite3.connect(DB_PATH)
-        conn.execute(
-            "CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT, description TEXT, price REAL)"
-        )
-        conn.executemany(
-            "INSERT INTO products VALUES (?, ?, ?, ?)",
-            [
-                (1, 'Teclado Mecânico',  'Switch red, RGB, anti-ghosting',   299.90),
-                (2, 'Mouse Gamer',       'DPI ajustável, 6 botões, wireless', 189.90),
-                (3, 'Monitor 24"',       'Full HD, 144Hz, IPS',              1299.00),
-                (4, 'Headset USB',       'Surround 7.1, cancelamento de ruído', 249.90),
-                (5, 'Webcam HD',         '1080p, microfone integrado',         149.90),
-            ]
-        )
-        conn.execute(
-            "CREATE TABLE admin_secrets (id INTEGER PRIMARY KEY, secret_name TEXT, secret_value TEXT)"
-        )
-        conn.execute(
-            "INSERT INTO admin_secrets VALUES (1, 'flag', ?)", (FLAG,)
-        )
-        conn.commit()
+    global _db_initialized
+    if _db_initialized:
+        return
+    conn = sqlite3.connect(DB_PATH)
+    row = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='products'"
+    ).fetchone()
+    if row is not None:
         conn.close()
+        _db_initialized = True
+        return
+    conn.execute(
+        "CREATE TABLE products (id INTEGER PRIMARY KEY, name TEXT, description TEXT, price REAL)"
+    )
+    conn.executemany(
+        "INSERT INTO products VALUES (?, ?, ?, ?)",
+        [
+            (1, 'Teclado Mecânico',  'Switch red, RGB, anti-ghosting',   299.90),
+            (2, 'Mouse Gamer',       'DPI ajustável, 6 botões, wireless', 189.90),
+            (3, 'Monitor 24"',       'Full HD, 144Hz, IPS',              1299.00),
+            (4, 'Headset USB',       'Surround 7.1, cancelamento de ruído', 249.90),
+            (5, 'Webcam HD',         '1080p, microfone integrado',         149.90),
+        ]
+    )
+    conn.execute(
+        "CREATE TABLE admin_secrets (id INTEGER PRIMARY KEY, secret_name TEXT, secret_value TEXT)"
+    )
+    conn.execute(
+        "INSERT INTO admin_secrets VALUES (1, 'flag', ?)", (FLAG,)
+    )
+    conn.commit()
+    conn.close()
+    _db_initialized = True
 
 @app.before_request
 def before_request():

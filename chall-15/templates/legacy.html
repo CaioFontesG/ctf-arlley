@@ -11,7 +11,6 @@
     .token-box { background: #0d0d1a; border: 1px solid #444; padding: 12px; margin-top: 20px; word-break: break-all; }
     .token-label { color: #888; font-size: 0.85em; }
     .warning { color: #ffaa00; font-size: 0.85em; margin-top: 5px; }
-    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
   </style>
 </head>
 <body>
@@ -28,9 +27,6 @@
     <div class="token-label">Token JWT emitido para {{ username }}:</div>
     <br>{{ token }}
   </div>
-  <div class="hint">Use este token para acessar /management?token=&lt;JWT&gt;. O algoritmo e a chave usados para assinar podem ser descobertos.</div>
-  {% else %}
-  <div class="hint">Qualquer credencial é aceita. O sistema emite um JWT com o perfil do usuário.</div>
   {% endif %}
 </div>
 </body>

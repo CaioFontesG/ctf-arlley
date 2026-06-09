@@ -12,7 +12,6 @@
     .result-item { border: 1px solid #333; padding: 10px; margin-bottom: 8px; }
     .debug-box { background: #0d1a0d; border: 1px solid #336633; padding: 12px; margin-top: 15px; }
     .flag { background: #0d2b0d; border: 1px solid #00ff88; padding: 15px; margin-top: 15px; font-size: 1.1em; }
-    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
   </style>
 </head>
 <body>
@@ -28,7 +27,6 @@
   {% elif debug %}
   <div class="debug-box">
     <strong>[DEBUG]</strong> Modo de diagnóstico ativo.<br>
-    {% if hint %}<em>{{ hint }}</em>{% endif %}
   </div>
   {% elif results is defined %}
     {% if results %}
@@ -42,7 +40,6 @@
     {% endif %}
   {% endif %}
 
-  <div class="hint">Este endpoint tem parâmetros não documentados. Use uma wordlist de parâmetros HTTP.</div>
 </div>
 </body>
 </html>

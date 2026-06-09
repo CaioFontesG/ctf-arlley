@@ -7,14 +7,6 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 FLAG       = os.environ.get('FLAG', 'FLAG_NOT_SET')
 JWT_SECRET = 'secret'
-FLAG_PATH  = '/flag.txt'
-
-def read_flag():
-    try:
-        with open(FLAG_PATH) as f:
-            return f.read().strip()
-    except Exception:
-        return FLAG
 
 def decode_token(token):
     try:

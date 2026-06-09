@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Portal do Cliente</title>
+  <style>
+    body { font-family: monospace; background: #0f0f1a; color: #e0e0e0; display: flex; justify-content: center; padding: 60px 20px; }
+    .box { max-width: 560px; width: 100%; }
+    h1 { color: #00ff88; }
+    .subtitle { color: #666; font-size: 0.85em; margin-bottom: 30px; }
+    .card {
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      padding: 24px;
+      margin-top: 20px;
+    }
+    .card h2 { color: #00ff88; font-size: 1rem; margin-bottom: 16px; }
+    .field { margin-bottom: 10px; }
+    .field .label { color: #666; font-size: 0.8em; }
+    .field .value { color: #e0e0e0; }
+    .not-found { color: #ff4444; margin-top: 20px; }
+    .nav { margin-bottom: 20px; font-size: 0.85em; color: #555; }
+    .nav span { color: #00ff88; }
+  </style>
+</head>
+<body>
+<div class="box">
+  <h1>Portal do Cliente</h1>
+  <p class="subtitle">Bem-vindo à área do cliente. Você está logado como usuário #1.</p>
+
+  <div class="nav">Visualizando perfil: <span>#{{ user_id }}</span></div>
+
+  {% if user %}
+  <div class="card">
+    <h2>Dados do Perfil</h2>
+    <div class="field">
+      <div class="label">Nome</div>
+      <div class="value">{{ user.nome }}</div>
+    </div>
+    <div class="field">
+      <div class="label">E-mail</div>
+      <div class="value">{{ user.email }}</div>
+    </div>
+    <div class="field">
+      <div class="label">CPF</div>
+      <div class="value">{{ user.cpf }}</div>
+    </div>
+    <div class="field">
+      <div class="label">Telefone</div>
+      <div class="value">{{ user.telefone }}</div>
+    </div>
+    <div class="field">
+      <div class="label">Plano</div>
+      <div class="value">{{ user.plano }}</div>
+    </div>
+  </div>
+  {% else %}
+  <div class="not-found">Usuário #{{ user_id }} não encontrado.</div>
+  {% endif %}
+
+</div>
+</body>
+</html>

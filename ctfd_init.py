@@ -36,6 +36,8 @@ _FLAG_VARS = [
     "FLAG_SQL_INJECTION",    # 13
     "FLAG_UPLOAD",           # 14
     "FLAG_CADEIA",           # 15
+    "FLAG_PHISHING",         # 16
+    "FLAG_LGPD",             # 17
 ]
 FLAGS = {i + 1: os.environ.get(v, f"FLAG_NOT_SET_{v}") for i, v in enumerate(_FLAG_VARS)}
 
@@ -50,7 +52,7 @@ CHALLENGES = [
         ),
         "value": 50,
         "flag": FLAGS[1],
-        "hint": "Ctrl+U abre o código-fonte da página. Procure por comentários HTML.",
+        "hint": "Comentários HTML têm o formato <!-- ... -->. Procure por esse padrão no código-fonte.",
         "hint_cost": 0,
         "mitigation": "Nunca inclua dados sensíveis em comentários HTML — o cliente recebe o código-fonte completo. Use variáveis de servidor e nunca exponha segredos no template.",
     },
@@ -65,7 +67,7 @@ CHALLENGES = [
         "value": 50,
         "flag": FLAGS[2],
         "hint": "DevTools (F12) → aba Application → Storage → Cookies → selecione o site.",
-        "hint_cost": 0,
+        "hint_cost": 10,
         "mitigation": "Nunca armazene dados sensíveis em cookies sem criptografia. Use as flags HttpOnly (impede acesso via JS) e Secure (só HTTPS). Prefira armazenar apenas um identificador de sessão opaco no cookie.",
     },
     {
@@ -79,7 +81,7 @@ CHALLENGES = [
         "value": 50,
         "flag": FLAGS[3],
         "hint": "DevTools (F12) → aba Console. Recarregue a página se necessário.",
-        "hint_cost": 0,
+        "hint_cost": 10,
         "mitigation": "Remova todos os console.log com dados sensíveis antes de ir para produção. Use ferramentas de build (webpack, Vite) para eliminar logs automaticamente no bundle de produção.",
     },
     {
@@ -93,7 +95,7 @@ CHALLENGES = [
         "value": 50,
         "flag": FLAGS[4],
         "hint": "DevTools → Network → clique na requisição da página → aba Headers → Response Headers.",
-        "hint_cost": 0,
+        "hint_cost": 10,
         "mitigation": "Nunca exponha dados sensíveis em headers de resposta. Remova headers que revelem tecnologia, versão ou informações internas do servidor (X-Powered-By, Server, etc.).",
     },
     {
@@ -105,7 +107,7 @@ CHALLENGES = [
         ),
         "value": 100,
         "flag": FLAGS[5],
-        "hint": "Tente as combinações mais comuns: admin/admin, admin/password, root/root.",
+        "hint": "Tente as combinações padrões de fornecedores, equipamentos e serviços.",
         "hint_cost": 20,
         "mitigation": "Sempre altere credenciais padrão antes de implantar em produção. Use senhas fortes e únicas. Considere implementar bloqueio após tentativas falhas (rate limiting) e autenticação multifator.",
     },
@@ -228,19 +230,19 @@ CHALLENGES = [
         "mitigation": "Use sempre queries parametrizadas (prepared statements) — nunca concatene input do usuário na query. ORMs como SQLAlchemy fazem isso automaticamente. Aplique o princípio do menor privilégio no usuário do banco de dados.",
     },
     {
-        "name": "#14 - Upload Bypass",
+        "name": "#14 - Upload + LFI",
         "category": "Web",
         "description": (
-            f"O servidor aceita apenas `.jpg`, mas a validação verifica somente a última extensão.\n"
-            f"Faça upload de um arquivo com código executável e acesse-o em `/uploads/`.\n\n"
+            f"Um portal permite enviar fotos de perfil. Após o upload, a aplicação fornece um link para acessar o arquivo.\n"
+            f"Será que a rota de download está protegida contra path traversal?\n\n"
             f"Acesse o desafio: [{BASE_URL}/chall-14/]({BASE_URL}/chall-14/)\n\n"
             f"Endpoint de upload: `/upload`"
         ),
         "value": 500,
         "flag": FLAGS[14],
-        "hint": "Envie um arquivo nomeado shell.php.jpg contendo código PHP. Depois acesse /uploads/shell.php.jpg.",
+        "hint": "Observe o parâmetro da rota de download. Tente acessar arquivos fora do diretório de upload usando `../`.",
         "hint_cost": 100,
-        "mitigation": "Valide o tipo do arquivo pelo conteúdo (magic bytes), não pela extensão. Renomeie o arquivo no servidor. Armazene uploads fora do webroot e nunca sirva arquivos de upload com permissão de execução.",
+        "mitigation": "Nunca use input do usuário para construir caminhos de arquivo sem sanitização. Use `os.path.basename()` ou `werkzeug.utils.secure_filename` para limpar nomes de arquivo. Valide que o caminho resolvido está dentro do diretório permitido com `os.path.realpath()`.",
     },
     {
         "name": "#15 - Cadeia Completa",
@@ -259,6 +261,35 @@ CHALLENGES = [
         "hint": "O JWT usa HS256 com uma chave fraca. Use jwt_tool ou PyJWT para forjar. O endpoint de rede executa comandos do sistema.",
         "hint_cost": 100,
         "mitigation": "Use chaves JWT longas e aleatórias (mín. 256 bits). Nunca passe input do usuário para subprocess, os.system ou eval. Use allowlist para comandos de diagnóstico e separe redes de produção de ferramentas de manutenção.",
+    },
+    {
+        "name": "#16 - Phishing",
+        "category": "Social Engineering",
+        "description": (
+            f"Você recebeu um link suspeito dizendo que sua sessão no CTF expirou.\n"
+            f"Acesse e veja o que acontece quando você tenta fazer login.\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-16/]({BASE_URL}/chall-16/)"
+        ),
+        "value": 100,
+        "flag": FLAGS[16],
+        "hint": "Antes de inserir credenciais em qualquer site, verifique a URL na barra do navegador.",
+        "hint_cost": 20,
+        "mitigation": "Sempre verifique a URL antes de inserir credenciais. Phishing imita interfaces legítimas para roubar senhas. Use um gerenciador de senhas — ele só preenche automaticamente no domínio correto, nunca em páginas falsas.",
+    },
+    {
+        "name": "#17 - IDOR / LGPD",
+        "category": "Web",
+        "description": (
+            f"Este portal de clientes exibe dados pessoais pelo parâmetro `id` na URL.\n"
+            f"Você está logado como usuário #1 — mas será que só consegue ver seus próprios dados?\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-17/]({BASE_URL}/chall-17/)\n\n"
+            f"Endpoint: `/perfil?id=1`"
+        ),
+        "value": 150,
+        "flag": FLAGS[17],
+        "hint": "Tente alterar o parâmetro `id` na URL para outros valores inteiros.",
+        "hint_cost": 30,
+        "mitigation": "Nunca use IDs sequenciais como controle de acesso. Valide no servidor se o usuário autenticado tem permissão para acessar o recurso solicitado. Essa vulnerabilidade (IDOR) é uma das mais comuns em vazamentos de dados e viola diretamente a LGPD ao expor dados pessoais de terceiros.",
     },
 ]
 
@@ -368,6 +399,21 @@ def existing_challenges(session, nonce):
     return {}
 
 
+def challenges_with_flags(session, nonce):
+    """Returns {challenge_id: (flag_id, flag_content)} for challenges that have at least one flag."""
+    r = session.get(f"{CTFD_URL}/api/v1/flags",
+                    headers={"CSRF-Token": nonce}, timeout=10)
+    data = r.json()
+    if data.get("success"):
+        result = {}
+        for f in data.get("data", []):
+            cid = f["challenge_id"]
+            if cid not in result:
+                result[cid] = (f["id"], f["content"])
+        return result
+    return {}
+
+
 def main():
     session = requests.Session()
 
@@ -383,16 +429,40 @@ def main():
 
     nonce    = get_csrf_nonce(session)
     existing = existing_challenges(session, nonce)
+    flagged  = challenges_with_flags(session, nonce)
 
     log(f"\nPopulando desafios ({len(existing)} já existentes)...\n")
 
-    # IDs na ordem dos desafios (None se falhou ao criar)
-    ordered_ids = []
-
     for chall in CHALLENGES:
         if chall["name"] in existing:
-            log(f"  [skip] {chall['name']}")
-            ordered_ids.append(existing[chall["name"]])
+            chall_id = existing[chall["name"]]
+
+            # Limpa prerequisites de execuções anteriores
+            api(session, nonce, "patch", f"/challenges/{chall_id}", {
+                "requirements": {"prerequisites": [], "anonymize": False},
+            })
+
+            if chall_id not in flagged:
+                log(f"  [fix] {chall['name']} — flag faltante, criando...")
+                api(session, nonce, "post", "/flags", {
+                    "challenge_id": chall_id,
+                    "content":      chall["flag"],
+                    "type":         "static",
+                    "data":         "",
+                })
+            else:
+                flag_id, flag_content = flagged[chall_id]
+                if flag_content != chall["flag"]:
+                    log(f"  [update] {chall['name']} — rotacionando flag...")
+                    api(session, nonce, "delete", f"/flags/{flag_id}", {})
+                    api(session, nonce, "post", "/flags", {
+                        "challenge_id": chall_id,
+                        "content":      chall["flag"],
+                        "type":         "static",
+                        "data":         "",
+                    })
+                else:
+                    log(f"  [skip] {chall['name']}")
             continue
 
         log(f"  [+] {chall['name']}")
@@ -406,11 +476,9 @@ def main():
             "state":       "visible",
         })
         if data is None:
-            ordered_ids.append(None)
             continue
 
         chall_id = data["id"]
-        ordered_ids.append(chall_id)
 
         api(session, nonce, "post", "/flags", {
             "challenge_id": chall_id,
@@ -432,21 +500,6 @@ def main():
             "cost":         0,
             "type":         "standard",
         })
-
-    # Encadear pré-requisitos: cada desafio exige o anterior
-    log("\nConfigurando pré-requisitos (progressão linear)...")
-    for i in range(1, len(ordered_ids)):
-        curr_id = ordered_ids[i]
-        prev_id = ordered_ids[i - 1]
-        if curr_id is None or prev_id is None:
-            continue
-        api(session, nonce, "patch", f"/challenges/{curr_id}", {
-            "requirements": {
-                "prerequisites": [prev_id],
-                "anonymize":     True,   # mostra o título mas bloqueia o conteúdo
-            },
-        })
-        log(f"  [{i+1}] desbloqueado após [{i}]")
 
     log("\nSetup completo! Acesse http://localhost/ para começar.")
 

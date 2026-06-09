@@ -31,6 +31,8 @@ services:
       - chall-13
       - chall-14
       - chall-15
+      - chall-16
+      - chall-17
 
   ctfd:
     image: ctfd/ctfd
@@ -195,6 +197,34 @@ services:
       - rce_net
     environment:
       - FLAG=${FLAG_CADEIA}
+
+  chall-16:
+    build: ./chall-16
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_PHISHING}
+
+  chall-17:
+    build: ./chall-17
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_LGPD}
+
+  chall-finish:
+    build: ./chall-finish
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - CTFD_URL=http://ctfd:8000
+      - TOTAL_CHALLENGES=17
 
 volumes:
   ctfd_data:

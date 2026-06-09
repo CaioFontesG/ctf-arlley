@@ -1,50 +1,56 @@
 import os
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, Response
 
 app = Flask(__name__)
 FLAG = os.environ.get('FLAG', 'FLAG_NOT_SET')
 UPLOAD_DIR = '/app/uploads'
-SHELL_MARKERS = [b'<?php', b'#!/', b'import os', b'exec(', b'eval(', b'system(', b'passthru(']
 
 os.makedirs(UPLOAD_DIR, exist_ok=True)
+
+with open('/app/flag.txt', 'w') as _f:
+    _f.write(FLAG + '\n')
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/upload', methods=['GET', 'POST'])
+@app.route('/upload', methods=['POST'])
 def upload():
-    if request.method == 'GET':
-        return render_template('index.html')
-
     f = request.files.get('file')
     if not f or not f.filename:
         return render_template('index.html', message='Nenhum arquivo enviado.')
 
     filename = f.filename
     if not filename.lower().endswith('.jpg'):
-        return render_template('index.html', message='Apenas arquivos .jpg são permitidos!')
+        return render_template('index.html', message='Apenas arquivos .jpg são permitidos.')
 
-    save_path = os.path.join(UPLOAD_DIR, filename)
-    f.save(save_path)
+    filename = os.path.basename(filename)
+    if not filename:
+        return render_template('index.html', message='Nome de arquivo inválido.')
+
+    f.save(os.path.join(UPLOAD_DIR, filename))
 
     return render_template('index.html',
-                           message=f'Upload concluído.',
-                           file_url=f'uploads/{filename}')
+                           message='Upload realizado com sucesso.',
+                           file_url=f'download?file={filename}')
 
-@app.route('/uploads/<path:filename>')
-def uploaded_file(filename):
-    filepath = os.path.join(UPLOAD_DIR, filename)
-    if not os.path.exists(filepath):
+@app.route('/download')
+def download():
+    filename = request.args.get('file', '')
+    if not filename:
+        return render_template('index.html', message='Parâmetro "file" ausente.'), 400
+
+    if os.path.isabs(filename):
         return render_template('index.html', message='Arquivo não encontrado.'), 404
 
-    with open(filepath, 'rb') as f:
-        content = f.read(512)
+    filepath = os.path.join(UPLOAD_DIR, filename)
+    try:
+        with open(filepath, 'r', errors='replace') as f:
+            content = f.read()
+    except (FileNotFoundError, IsADirectoryError, PermissionError):
+        return render_template('index.html', message='Arquivo não encontrado.'), 404
 
-    if any(marker in content for marker in SHELL_MARKERS):
-        return render_template('flag.html', filename=filename, flag=FLAG)
-
-    return send_from_directory(UPLOAD_DIR, filename)
+    return Response(content, mimetype='text/plain')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

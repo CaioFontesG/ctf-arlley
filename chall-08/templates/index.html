@@ -13,7 +13,6 @@
     button { background: #00ff88; color: #000; border: none; padding: 10px 24px; cursor: pointer; font-family: monospace; font-weight: bold; font-size: 1em; }
     button:disabled { background: #333; color: #666; cursor: not-allowed; }
     .aviso { background: #1a1000; border: 1px solid #886600; padding: 12px; margin-top: 15px; }
-    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
   </style>
   <script>
     const CREDITOS = 5.00;
@@ -48,7 +47,6 @@
   {% if aviso %}
   <div class="aviso">{{ aviso }}</div>
   {% endif %}
-  <div class="hint">O JavaScript valida o saldo antes de enviar o formulário. Mas quem valida o preço no servidor?</div>
 </div>
 </body>
 </html>

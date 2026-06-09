@@ -11,7 +11,6 @@
     .message { margin-top: 15px; padding: 10px; border: 1px solid #444; }
     .file-link { margin-top: 10px; }
     .file-link a { color: #00ff88; }
-    .hint { color: #666; margin-top: 30px; font-size: 0.85em; border-left: 3px solid #222; padding-left: 10px; }
   </style>
 </head>
 <body>
@@ -27,9 +26,8 @@
   <div class="message">{{ message }}</div>
   {% endif %}
   {% if file_url %}
-  <div class="file-link">Arquivo salvo em: <a href="{{ file_url }}">{{ file_url }}</a></div>
+  <div class="file-link">Foto disponível em: <a href="{{ file_url }}">{{ file_url }}</a></div>
   {% endif %}
-  <div class="hint">A validação verifica apenas a última extensão. Arquivos são salvos e acessíveis em <code>uploads/</code>.</div>
 </div>
 </body>
 </html>

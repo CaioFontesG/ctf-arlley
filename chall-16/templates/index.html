@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CTF LASETE</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="/themes/core/static/img/favicon.ico?d=b515d7da" type="image/x-icon">
+  <link rel="stylesheet" href="/themes/core/static/assets/main.e9ec7884.css">
+  <script src="/themes/core/static/assets/color_mode_switcher.52334129.js"></script>
+  <script type="text/javascript">
+      window.init = {
+          'urlRoot': "",
+          'csrfNonce': "00000000000000000000000000000000000000000000000000000000deadbeef",
+          'userMode': "users",
+          'userId': 0,
+          'userName': null,
+          'userEmail': null,
+          'userVerified': null,
+          'teamId': null,
+          'teamName': null,
+          'start': null,
+          'end': null,
+          'themeSettings': null,
+          'eventSounds': [
+            "/themes/core/static/sounds/notification.webm",
+            "/themes/core/static/sounds/notification.mp3",
+          ],
+      }
+  </script>
+</head>
+<body>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <div class="container">
+    <a href="/" class="navbar-brand">CTF LASETE</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#base-navbars"
+        aria-controls="base-navbars" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="base-navbars">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item"><a class="nav-link" href="/users">Usuários</a></li>
+        <li class="nav-item"><a class="nav-link" href="/scoreboard">Painel de controle</a></li>
+        <li class="nav-item"><a class="nav-link" href="/challenges">Desafios</a></li>
+      </ul>
+      <hr class="d-sm-flex d-md-flex d-lg-none">
+      <ul class="navbar-nav ms-md-auto d-block d-sm-flex d-md-flex">
+        <li class="nav-item">
+          <a class="nav-link" href="/register">
+            <span class="d-sm-inline d-md-none d-lg-inline">
+              <i class="fas fa-user-plus pe-1"></i> Registro
+            </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/login">
+            <span class="d-sm-inline d-md-none d-lg-inline">
+              <i class="fas fa-sign-in-alt pe-1"></i> Login
+            </span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main role="main">
+  <div class="jumbotron">
+    <div class="container">
+      <h1>Login</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col offset-md-2 col-lg-6 offset-lg-3">
+
+        <div class="alert alert-warning" role="alert">
+          &#9888; Sua sessão expirou. Por favor, faça login novamente para continuar.
+        </div>
+
+        <form method="post" accept-charset="utf-8" action="login">
+          <div class="mb-3">
+            <b>
+              <label class="form-label" for="name">Nome de usuário ou e-mail</label>
+              <span class="text-danger">*</span>
+            </b>
+            <input autocomplete="username email" autofocus class="form-control" id="name" name="name" required type="text" value="">
+          </div>
+
+          <div class="mb-3">
+            <b>
+              <label class="form-label" for="password">Senha</label>
+              <span class="text-danger">*</span>
+            </b>
+            <input autocomplete="current-password" class="form-control" id="password" name="password" required type="password" value="">
+          </div>
+
+          <div class="row pt-3">
+            <div class="col-6 col-md-8">
+              <a class="align-middle" href="/reset_password">Esqueceu sua senha?</a>
+            </div>
+            <div class="col-6 col-md-4">
+              <input class="btn btn-block btn-primary w-100" id="_submit" name="_submit" type="submit" value="Enviar">
+            </div>
+          </div>
+
+          <input id="nonce" name="nonce" type="hidden" value="00000000000000000000000000000000000000000000000000000000deadbeef">
+        </form>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container text-center">
+    <a href="https://ctfd.io" class="text-secondary">
+      <small class="text-muted">Desenvolvido por CTFd</small>
+    </a>
+  </div>
+</footer>
+
+<script type="module" src="/themes/core/static/assets/index.94b01c79.js"></script>
+<script type="module" src="/themes/core/static/assets/page.9d188b19.js"></script>
+
+</body>
+</html>
