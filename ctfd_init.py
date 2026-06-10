@@ -127,13 +127,12 @@ CHALLENGES = [
         "name": "#07 - Enumeração",
         "category": "Web",
         "description": (
-            f"Esta aplicação tem rotas não linkadas. Use uma ferramenta de enumeração de diretórios.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-07/]({BASE_URL}/chall-07/)\n\n"
-            f"Wordlist recomendada: `SecLists/Discovery/Web-Content/common.txt`"
+            f"Esta aplicação tem rotas que não aparecem em nenhum link da página.\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-07/]({BASE_URL}/chall-07/)"
         ),
         "value": 100,
         "flag": FLAGS[7],
-        "hint": "gobuster dir -u <url> -w common.txt",
+        "hint": "Enumere diretórios com gobuster e a wordlist common.txt do SecLists: `gobuster dir -u <url> -w common.txt`",
         "hint_cost": 20,
         "mitigation": "Não deixe rotas sensíveis acessíveis por obscuridade. Retorne 404 genérico para rotas inexistentes sem revelar estrutura interna. Implemente autenticação nas rotas que contêm dados sensíveis.",
     },
@@ -188,12 +187,11 @@ CHALLENGES = [
         "category": "Web",
         "description": (
             f"O endpoint `/search` aceita parâmetros não documentados que ativam funcionalidades ocultas.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-11/]({BASE_URL}/chall-11/)\n\n"
-            f"Wordlist recomendada: `SecLists/Discovery/Web-Content/burp-parameter-names.txt`"
+            f"Acesse o desafio: [{BASE_URL}/chall-11/]({BASE_URL}/chall-11/)"
         ),
         "value": 200,
         "flag": FLAGS[11],
-        "hint": "ffuf -u <url>/search?FUZZ=true -w burp-parameter-names.txt — depois combine os parâmetros encontrados.",
+        "hint": "Faça fuzzing de parâmetros com a wordlist burp-parameter-names.txt do SecLists: `ffuf -u <url>/search?FUZZ=true -w burp-parameter-names.txt` — depois combine os parâmetros encontrados.",
         "hint_cost": 40,
         "mitigation": "Remova endpoints e parâmetros de debug antes de ir para produção. Não ative funcionalidades ocultas via parâmetros não documentados — qualquer parâmetro aceito pelo servidor é superfície de ataque.",
     },
