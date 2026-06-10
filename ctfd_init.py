@@ -47,23 +47,22 @@ CHALLENGES = [
         "name": "#01 - Comentário HTML",
         "category": "Web",
         "description": (
-            f"Às vezes informações sensíveis ficam escondidas no código-fonte da página.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-01/]({BASE_URL}/chall-01/)\n\n"
-            f"Dica de ferramenta: Ctrl+U no navegador ou DevTools → Elements."
+            f"Nem tudo que compõe uma página chega até a tela. "
+            f"Vale investigar como ela foi montada por baixo dos panos.\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-01/]({BASE_URL}/chall-01/)"
         ),
         "value": 50,
         "flag": FLAGS[1],
-        "hint": "Comentários HTML têm o formato <!-- ... -->. Procure por esse padrão no código-fonte.",
-        "hint_cost": 0,
+        "hint": "Veja o código-fonte da página (Ctrl+U, ou DevTools → Elements) e procure por comentários no formato <!-- ... -->.",
+        "hint_cost": 10,
         "mitigation": "Nunca inclua dados sensíveis em comentários HTML — o cliente recebe o código-fonte completo. Use variáveis de servidor e nunca exponha segredos no template.",
     },
     {
         "name": "#02 - Cookie Exposto",
         "category": "Web",
         "description": (
-            f"Esta aplicação armazena uma informação importante no navegador.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-02/]({BASE_URL}/chall-02/)\n\n"
-            f"Dica de ferramenta: DevTools → Application → Cookies."
+            f"Esta aplicação guarda uma informação importante do seu lado — no navegador.\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-02/]({BASE_URL}/chall-02/)"
         ),
         "value": 50,
         "flag": FLAGS[2],
@@ -75,9 +74,8 @@ CHALLENGES = [
         "name": "#03 - Console.log",
         "category": "Web",
         "description": (
-            f"Desenvolvedores às vezes deixam informações de debug visíveis no console JavaScript.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-03/]({BASE_URL}/chall-03/)\n\n"
-            f"Dica de ferramenta: DevTools → Console."
+            f"Desenvolvedores às vezes deixam informações de debug visíveis no navegador.\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-03/]({BASE_URL}/chall-03/)"
         ),
         "value": 50,
         "flag": FLAGS[3],
@@ -90,8 +88,7 @@ CHALLENGES = [
         "category": "Web",
         "description": (
             f"Uma resposta HTTP tem mais do que só o corpo da página — os headers também carregam informações.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-04/]({BASE_URL}/chall-04/)\n\n"
-            f"Dica de ferramenta: DevTools → Network → selecione a requisição → Response Headers."
+            f"Acesse o desafio: [{BASE_URL}/chall-04/]({BASE_URL}/chall-04/)"
         ),
         "value": 50,
         "flag": FLAGS[4],
@@ -144,10 +141,10 @@ CHALLENGES = [
         "name": "#08 - Validação no Front é só UX",
         "category": "Web",
         "description": (
-            f"Esta loja valida o saldo do cliente em JavaScript antes de enviar o formulário.\n"
-            f"Mas o servidor confia cegamente no preço recebido.\n\n"
+            f"Esta loja valida o saldo do cliente em JavaScript antes de liberar a compra.\n"
+            f"Onde será que essa validação realmente acontece?\n\n"
             f"Acesse o desafio: [{BASE_URL}/chall-08/]({BASE_URL}/chall-08/)\n\n"
-            f"Endpoint de compra: `POST /comprar` com campo `preco`"
+            f"Endpoint de compra: `POST /comprar`"
         ),
         "value": 150,
         "flag": FLAGS[8],
@@ -210,8 +207,11 @@ CHALLENGES = [
         ),
         "value": 300,
         "flag": FLAGS[12],
-        "hint": "ffuf -u <url>/FUZZ -w common.txt para encontrar o endpoint. Depois use `?doc=` com `../` para sair do diretório. A flag está em /var/secrets/flag.txt.",
-        "hint_cost": 60,
+        "hints": [
+            {"content": "Primeiro descubra qual rota lê arquivos. Faça fuzzing de diretórios com common.txt (ex.: `ffuf -u <url>/FUZZ -w common.txt`).", "cost": 15},
+            {"content": "A rota aceita um parâmetro de query que aponta para um arquivo (algo como `?doc=...`). Tente sair do diretório com sequências `../`.", "cost": 30},
+            {"content": "A flag está em `/var/secrets/flag.txt`. Monte algo como `?doc=../../../../var/secrets/flag.txt`.", "cost": 60},
+        ],
         "mitigation": "Sanitize o caminho recebido: use os.path.realpath() e verifique que o resultado começa com o diretório base permitido. Prefira mapear IDs internos para arquivos em vez de aceitar caminhos diretamente do usuário.",
     },
     {
@@ -240,26 +240,29 @@ CHALLENGES = [
         ),
         "value": 500,
         "flag": FLAGS[14],
-        "hint": "Observe o parâmetro da rota de download. Tente acessar arquivos fora do diretório de upload usando `../`.",
-        "hint_cost": 100,
+        "hints": [
+            {"content": "Faça um upload válido e observe com atenção o link de download gerado — qual parâmetro ele usa?", "cost": 25},
+            {"content": "A rota de download monta o caminho do arquivo a partir desse parâmetro sem sanitizar. Injete `../` para escapar do diretório de uploads.", "cost": 50},
+            {"content": "Leia um arquivo do sistema fora do diretório de uploads encadeando `../../../` no parâmetro de download até alcançar o arquivo da flag.", "cost": 100},
+        ],
         "mitigation": "Nunca use input do usuário para construir caminhos de arquivo sem sanitização. Use `os.path.basename()` ou `werkzeug.utils.secure_filename` para limpar nomes de arquivo. Valide que o caminho resolvido está dentro do diretório permitido com `os.path.realpath()`.",
     },
     {
         "name": "#15 - Cadeia Completa",
         "category": "Web",
         "description": (
-            f"Desafio encadeado com múltiplos passos:\n\n"
-            f"1. Enumere as rotas da aplicação\n"
-            f"2. Autentique-se em `/legacy` — qualquer credencial funciona\n"
-            f"3. Analise o JWT recebido e forge um token com role `admin`\n"
-            f"4. Acesse `/management` com o token forjado\n"
-            f"5. Explore o endpoint de diagnóstico de rede em `/management/network`\n\n"
+            f"Um sistema legado mal protegido expõe um caminho que vai da autenticação até a "
+            f"execução de comandos no servidor.\n"
+            f"Enumere a aplicação, encontre o login, entenda como a sessão é assinada e escale seus privilégios.\n\n"
             f"Acesse o desafio: [{BASE_URL}/chall-15/]({BASE_URL}/chall-15/)"
         ),
         "value": 500,
         "flag": FLAGS[15],
-        "hint": "O JWT usa HS256 com uma chave fraca. Use jwt_tool ou PyJWT para forjar. O endpoint de rede executa comandos do sistema.",
-        "hint_cost": 100,
+        "hints": [
+            {"content": "Comece enumerando as rotas. Há uma área de login legada em `/legacy` onde qualquer credencial é aceita.", "cost": 25},
+            {"content": "Depois de logar você recebe um JWT assinado com HS256 e uma chave fraca/previsível. Quebre a chave (jwt_tool/hashcat) e forje um token com `role: admin`.", "cost": 50},
+            {"content": "Com o token de admin, acesse `/management`. O endpoint `/management/network` executa comandos do sistema — injete um comando para ler a flag.", "cost": 100},
+        ],
         "mitigation": "Use chaves JWT longas e aleatórias (mín. 256 bits). Nunca passe input do usuário para subprocess, os.system ou eval. Use allowlist para comandos de diagnóstico e separe redes de produção de ferramentas de manutenção.",
     },
     {
@@ -280,8 +283,8 @@ CHALLENGES = [
         "name": "#17 - IDOR / LGPD",
         "category": "Web",
         "description": (
-            f"Este portal de clientes exibe dados pessoais pelo parâmetro `id` na URL.\n"
-            f"Você está logado como usuário #1 — mas será que só consegue ver seus próprios dados?\n\n"
+            f"Este portal de clientes exibe seus dados pessoais após o login.\n"
+            f"Você está logado como usuário #1.\n\n"
             f"Acesse o desafio: [{BASE_URL}/chall-17/]({BASE_URL}/chall-17/)\n\n"
             f"Endpoint: `/perfil?id=1`"
         ),
@@ -296,18 +299,19 @@ CHALLENGES = [
         "category": "Forense",
         "description": (
             f"A galeria abaixo tem 50 imagens quase idênticas. Uma delas esconde a flag "
-            f"embutida nos dados do arquivo (esteganografia) — não basta olhar, é preciso extrair.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-18/]({BASE_URL}/chall-18/)\n\n"
-            f"Ferramenta recomendada: `steghide`. A senha (passphrase) é vazia."
+            f"embutida nos dados do arquivo — não basta olhar, é preciso extrair.\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-18/]({BASE_URL}/chall-18/)"
         ),
         "value": 200,
         "flag": FLAGS[18],
-        "hint": (
-            "Baixe todas as imagens e teste uma a uma com steghide e passphrase vazia. "
-            "Um laço resolve:\n"
-            "for f in image_*.jpg; do steghide extract -sf \"$f\" -p \"\" 2>/dev/null && echo \"flag em: $f\"; done"
-        ),
-        "hint_cost": 40,
+        "hints": [
+            {"content": "O conteúdo está escondido dentro de uma das imagens (esteganografia). Para arquivos JPG, a ferramenta clássica é o `steghide`.", "cost": 10},
+            {"content": "Use `steghide extract` em cada imagem. A passphrase é vazia (apenas Enter, ou `-p \"\"`).", "cost": 20},
+            {"content": (
+                "Baixe todas e automatize com um laço:\n"
+                "for f in image_*.jpg; do steghide extract -sf \"$f\" -p \"\" 2>/dev/null && echo \"flag em: $f\"; done"
+            ), "cost": 40},
+        ],
         "mitigation": "Esteganografia pode ser usada para exfiltrar dados escondidos em arquivos de mídia aparentemente inofensivos. Em ambientes sensíveis, inspecione arquivos enviados/baixados com ferramentas de detecção (stegdetect, análise de entropia) e bloqueie a saída de arquivos não autorizados.",
     },
 ]
@@ -315,6 +319,15 @@ CHALLENGES = [
 
 def log(msg):
     print(msg, flush=True)
+
+
+def normalize_hints(chall):
+    """Aceita tanto um hint único (hint/hint_cost) quanto uma lista em camadas (hints)."""
+    if chall.get("hints"):
+        return chall["hints"]
+    if chall.get("hint"):
+        return [{"content": chall["hint"], "cost": chall.get("hint_cost", 0)}]
+    return []
 
 
 def extract_nonce(html):
@@ -506,12 +519,13 @@ def main():
             "data":         "",
         })
 
-        api(session, nonce, "post", "/hints", {
-            "challenge_id": chall_id,
-            "content":      chall["hint"],
-            "cost":         chall["hint_cost"],
-            "type":         "standard",
-        })
+        for h in normalize_hints(chall):
+            api(session, nonce, "post", "/hints", {
+                "challenge_id": chall_id,
+                "content":      h["content"],
+                "cost":         h["cost"],
+                "type":         "standard",
+            })
 
     log("\nSetup completo! Acesse http://localhost/ para começar.")
 
