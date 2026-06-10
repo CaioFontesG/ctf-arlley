@@ -33,6 +33,7 @@ services:
       - chall-15
       - chall-16
       - chall-17
+      - chall-18
 
   ctfd:
     image: ctfd/ctfd
@@ -216,6 +217,15 @@ services:
     environment:
       - FLAG=${FLAG_LGPD}
 
+  chall-18:
+    build: ./chall-18
+    expose:
+      - "5000"
+    networks:
+      - ctf_net
+    environment:
+      - FLAG=${FLAG_ESTEGANOGRAFIA}
+
   chall-finish:
     build: ./chall-finish
     expose:
@@ -224,7 +234,7 @@ services:
       - ctf_net
     environment:
       - CTFD_URL=http://ctfd:8000
-      - TOTAL_CHALLENGES=17
+      - TOTAL_CHALLENGES=18
 
 volumes:
   ctfd_data:

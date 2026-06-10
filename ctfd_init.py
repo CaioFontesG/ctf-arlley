@@ -38,6 +38,7 @@ _FLAG_VARS = [
     "FLAG_CADEIA",           # 15
     "FLAG_PHISHING",         # 16
     "FLAG_LGPD",             # 17
+    "FLAG_ESTEGANOGRAFIA",   # 18
 ]
 FLAGS = {i + 1: os.environ.get(v, f"FLAG_NOT_SET_{v}") for i, v in enumerate(_FLAG_VARS)}
 
@@ -205,12 +206,11 @@ CHALLENGES = [
         "description": (
             f"Esta aplicação possui um endpoint que lê arquivos do disco a partir de um parâmetro de query.\n"
             f"O servidor não valida o caminho informado.\n\n"
-            f"Acesse o desafio: [{BASE_URL}/chall-12/]({BASE_URL}/chall-12/)\n\n"
-            f"A flag está em `/var/secrets/flag.txt`."
+            f"Acesse o desafio: [{BASE_URL}/chall-12/]({BASE_URL}/chall-12/)"
         ),
         "value": 300,
         "flag": FLAGS[12],
-        "hint": "ffuf -u <url>/FUZZ -w common.txt para encontrar o endpoint. Depois use `?doc=` com `../` para sair do diretório.",
+        "hint": "ffuf -u <url>/FUZZ -w common.txt para encontrar o endpoint. Depois use `?doc=` com `../` para sair do diretório. A flag está em /var/secrets/flag.txt.",
         "hint_cost": 60,
         "mitigation": "Sanitize o caminho recebido: use os.path.realpath() e verifique que o resultado começa com o diretório base permitido. Prefira mapear IDs internos para arquivos em vez de aceitar caminhos diretamente do usuário.",
     },
@@ -290,6 +290,25 @@ CHALLENGES = [
         "hint": "Tente alterar o parâmetro `id` na URL para outros valores inteiros.",
         "hint_cost": 30,
         "mitigation": "Nunca use IDs sequenciais como controle de acesso. Valide no servidor se o usuário autenticado tem permissão para acessar o recurso solicitado. Essa vulnerabilidade (IDOR) é uma das mais comuns em vazamentos de dados e viola diretamente a LGPD ao expor dados pessoais de terceiros.",
+    },
+    {
+        "name": "#18 - Esteganografia",
+        "category": "Forense",
+        "description": (
+            f"A galeria abaixo tem 50 imagens quase idênticas. Uma delas esconde a flag "
+            f"embutida nos dados do arquivo (esteganografia) — não basta olhar, é preciso extrair.\n\n"
+            f"Acesse o desafio: [{BASE_URL}/chall-18/]({BASE_URL}/chall-18/)\n\n"
+            f"Ferramenta recomendada: `steghide`. A senha (passphrase) é vazia."
+        ),
+        "value": 200,
+        "flag": FLAGS[18],
+        "hint": (
+            "Baixe todas as imagens e teste uma a uma com steghide e passphrase vazia. "
+            "Um laço resolve:\n"
+            "for f in image_*.jpg; do steghide extract -sf \"$f\" -p \"\" 2>/dev/null && echo \"flag em: $f\"; done"
+        ),
+        "hint_cost": 40,
+        "mitigation": "Esteganografia pode ser usada para exfiltrar dados escondidos em arquivos de mídia aparentemente inofensivos. Em ambientes sensíveis, inspecione arquivos enviados/baixados com ferramentas de detecção (stegdetect, análise de entropia) e bloqueie a saída de arquivos não autorizados.",
     },
 ]
 
@@ -491,13 +510,6 @@ def main():
             "challenge_id": chall_id,
             "content":      chall["hint"],
             "cost":         chall["hint_cost"],
-            "type":         "standard",
-        })
-
-        api(session, nonce, "post", "/hints", {
-            "challenge_id": chall_id,
-            "content":      "Como evitar: " + chall["mitigation"],
-            "cost":         0,
             "type":         "standard",
         })
 

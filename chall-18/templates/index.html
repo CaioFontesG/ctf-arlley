@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Galeria de Imagens</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: monospace;
+      background: #0f0f1a;
+      color: #e0e0e0;
+      padding: 40px 24px;
+    }
+    h1 { color: #00ff88; margin-bottom: 6px; }
+    .subtitle {
+      color: #666;
+      font-size: 0.85em;
+      margin-bottom: 32px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #16213e;
+      border: 1px solid #0f3460;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .card img {
+      width: 100%;
+      display: block;
+      height: 110px;
+      object-fit: cover;
+    }
+    .card-footer {
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .card-footer span {
+      color: #888;
+      font-size: 0.75em;
+    }
+    .card-footer a {
+      color: #00ff88;
+      font-size: 0.75em;
+      text-decoration: none;
+      border: 1px solid #00ff88;
+      padding: 2px 8px;
+      border-radius: 3px;
+    }
+    .card-footer a:hover { background: #00ff8822; }
+  </style>
+</head>
+<body>
+  <h1>Galeria de Imagens</h1>
+  <p class="subtitle">50 imagens encontradas no servidor. Uma delas carrega algo a mais.</p>
+
+  <div class="grid">
+    {% for img in images %}
+    <div class="card">
+      <img src="images/{{ img }}" alt="{{ img }}" loading="lazy">
+      <div class="card-footer">
+        <span>{{ img }}</span>
+        <a href="images/{{ img }}" download="{{ img }}">download</a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+</html>
