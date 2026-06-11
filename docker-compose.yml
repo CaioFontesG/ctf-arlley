@@ -45,6 +45,7 @@ services:
     volumes:
       - ctfd_data:/var/log/CTFd
       - ctfd_uploads:/var/uploads
+      - ./ctfd-overrides/challenge.html:/opt/CTFd/CTFd/themes/core/templates/challenge.html:ro
     networks:
       - ctf_net
     restart: unless-stopped
@@ -223,8 +224,6 @@ services:
       - "5000"
     networks:
       - ctf_net
-    environment:
-      - FLAG=${FLAG_ESTEGANOGRAFIA}
 
   chall-finish:
     build: ./chall-finish
@@ -235,6 +234,7 @@ services:
     environment:
       - CTFD_URL=http://ctfd:8000
       - TOTAL_CHALLENGES=18
+      - FLAG=${FLAG_CONCLUSAO}
 
 volumes:
   ctfd_data:

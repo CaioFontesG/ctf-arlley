@@ -39,6 +39,7 @@ _FLAG_VARS = [
     "FLAG_PHISHING",         # 16
     "FLAG_LGPD",             # 17
     "FLAG_ESTEGANOGRAFIA",   # 18
+    "FLAG_CONCLUSAO",        # 19 (final — desbloqueia após todos)
 ]
 FLAGS = {i + 1: os.environ.get(v, f"FLAG_NOT_SET_{v}") for i, v in enumerate(_FLAG_VARS)}
 
@@ -296,21 +297,31 @@ CHALLENGES = [
         "name": "#18 - Esteganografia",
         "category": "Forense",
         "description": (
-            f"A galeria abaixo tem 50 imagens quase idênticas. Uma delas esconde a flag "
-            f"embutida nos dados do arquivo — não basta olhar, é preciso extrair.\n\n"
+            f"Uma imagem foi recuperada de uma máquina suspeita. A informação que procuramos "
+            f"não foi escondida com nenhuma ferramenta — ela está à vista, em plena luz do dia.\n\n"
             f"Acesse o desafio: [{BASE_URL}/chall-18/]({BASE_URL}/chall-18/)"
         ),
         "value": 200,
         "flag": FLAGS[18],
         "hints": [
-            {"content": "O conteúdo está escondido dentro de uma das imagens (esteganografia). Para arquivos JPG, a ferramenta clássica é o `steghide`.", "cost": 10},
-            {"content": "Use `steghide extract` em cada imagem. A passphrase é vazia (apenas Enter, ou `-p \"\"`).", "cost": 20},
-            {"content": (
-                "Baixe todas e automatize com um laço:\n"
-                "for f in image_*.jpg; do steghide extract -sf \"$f\" -p \"\" 2>/dev/null && echo \"flag em: $f\"; done"
-            ), "cost": 40},
+            {"content": "Olhe com atenção para os monitores na imagem. Um deles exibe uma longa sequência de 0s e 1s.", "cost": 15},
+            {"content": "Transcreva os bits e converta de binário para texto — cada 8 bits formam 1 caractere ASCII. A frase decodificada é a própria flag.", "cost": 30},
         ],
-        "mitigation": "Esteganografia pode ser usada para exfiltrar dados escondidos em arquivos de mídia aparentemente inofensivos. Em ambientes sensíveis, inspecione arquivos enviados/baixados com ferramentas de detecção (stegdetect, análise de entropia) e bloqueie a saída de arquivos não autorizados.",
+        "mitigation": "Informação sensível 'à vista' (em prints de tela, fotos e capturas compartilhadas) é uma fonte comum de vazamento. Revise o que aparece em imagens antes de divulgá-las — dados podem estar perfeitamente legíveis sem necessidade de qualquer ferramenta de extração.",
+    },
+    {
+        "name": "#19 - 🏁 Missão Cumprida",
+        "category": "Final",
+        "final": True,  # desbloqueia só após resolver todos os outros
+        "description": (
+            f"Você chegou até aqui resolvendo todos os 18 desafios — respeito! 🎉\n\n"
+            f"Este é o encerramento do CTF LASETE. Acesse a página de conclusão, informe "
+            f"seu usuário do CTFd e receba seu agradecimento junto com a flag final:\n\n"
+            f"🏁 [{BASE_URL}/finish/]({BASE_URL}/finish/)"
+        ),
+        "value": 100,
+        "flag": FLAGS[19],
+        "mitigation": "",
     },
 ]
 
@@ -460,6 +471,7 @@ def main():
     nonce    = get_csrf_nonce(session)
     existing = existing_challenges(session, nonce)
     flagged  = challenges_with_flags(session, nonce)
+    all_ids  = dict(existing)   # name -> id (existentes + criados nesta execução)
 
     log(f"\nPopulando desafios ({len(existing)} já existentes)...\n")
 
@@ -509,6 +521,7 @@ def main():
             continue
 
         chall_id = data["id"]
+        all_ids[chall["name"]] = chall_id
 
         api(session, nonce, "post", "/flags", {
             "challenge_id": chall_id,
@@ -524,6 +537,17 @@ def main():
                 "cost":         h["cost"],
                 "type":         "standard",
             })
+
+    # Passada final: o desafio marcado como "final" só desbloqueia após todos os outros.
+    final = next((c for c in CHALLENGES if c.get("final")), None)
+    if final and final["name"] in all_ids:
+        final_id   = all_ids[final["name"]]
+        prereq_ids = [all_ids[c["name"]] for c in CHALLENGES
+                      if not c.get("final") and c["name"] in all_ids]
+        api(session, nonce, "patch", f"/challenges/{final_id}", {
+            "requirements": {"prerequisites": prereq_ids, "anonymize": False},
+        })
+        log(f"\n  [final] {final['name']} oculto até resolver {len(prereq_ids)} desafios.")
 
     log("\nSetup completo! Acesse http://localhost/ para começar.")
 

@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Galeria de Imagens</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Análise Forense — Evidência</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -10,65 +11,64 @@
       background: #0f0f1a;
       color: #e0e0e0;
       padding: 40px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    h1 { color: #00ff88; margin-bottom: 6px; }
+    h1 { color: #00ff88; margin-bottom: 6px; text-align: center; }
     .subtitle {
       color: #666;
-      font-size: 0.85em;
-      margin-bottom: 32px;
+      font-size: 0.9em;
+      margin-bottom: 28px;
+      max-width: 720px;
+      text-align: center;
+      line-height: 1.5;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-    }
-    .card {
+    .frame {
       background: #16213e;
       border: 1px solid #0f3460;
-      border-radius: 6px;
-      overflow: hidden;
+      border-radius: 8px;
+      padding: 12px;
+      max-width: 900px;
+      width: 100%;
     }
-    .card img {
+    .frame img {
       width: 100%;
       display: block;
-      height: 110px;
-      object-fit: cover;
+      border-radius: 4px;
     }
-    .card-footer {
-      padding: 8px 10px;
+    .footer {
+      margin-top: 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      font-size: 0.8em;
     }
-    .card-footer span {
-      color: #888;
-      font-size: 0.75em;
-    }
-    .card-footer a {
+    .footer span { color: #888; }
+    .footer a {
       color: #00ff88;
-      font-size: 0.75em;
       text-decoration: none;
       border: 1px solid #00ff88;
-      padding: 2px 8px;
+      padding: 3px 12px;
       border-radius: 3px;
     }
-    .card-footer a:hover { background: #00ff8822; }
+    .footer a:hover { background: #00ff8822; }
   </style>
 </head>
 <body>
-  <h1>Galeria de Imagens</h1>
-  <p class="subtitle">50 imagens encontradas no servidor. Uma delas carrega algo a mais.</p>
+  <h1>Análise Forense</h1>
+  <p class="subtitle">
+    Esta imagem foi recuperada de uma máquina suspeita.
+    A informação que procuramos não foi escondida com nenhuma ferramenta —
+    ela está bem ali, à vista. Olhe com atenção.
+  </p>
 
-  <div class="grid">
-    {% for img in images %}
-    <div class="card">
-      <img src="images/{{ img }}" alt="{{ img }}" loading="lazy">
-      <div class="card-footer">
-        <span>{{ img }}</span>
-        <a href="images/{{ img }}" download="{{ img }}">download</a>
-      </div>
+  <div class="frame">
+    <img src="images/evidencia.jpg" alt="evidência recuperada">
+    <div class="footer">
+      <span>evidencia.jpg</span>
+      <a href="images/evidencia.jpg" download="evidencia.jpg">download</a>
     </div>
-    {% endfor %}
   </div>
 </body>
 </html>
